@@ -61,7 +61,7 @@ netDeconv <- function(mat, beta=0.9, alpha=1, obsOnly=TRUE) {
 
   ## network deconvolution
   matEvPrimer <- matEv/(m+matEv);
-  matNew1 <- matEig$vectors %*% diag(matEvPrimer) %*% chol2inv(matEig$vectors)
+  matNew1 <- matEig$vectors %*% diag(matEvPrimer) %*% solve(matEig$vectors)
 
   
   if(obsOnly) {
@@ -77,10 +77,11 @@ netDeconv <- function(mat, beta=0.9, alpha=1, obsOnly=TRUE) {
 
   ## linearly mapping the deconvolved matrix to be between 0 and 1
   matNd <- boundnorm(matNew2)
+  return(matNd)
 }
 
 
 ## NOT TESTED YET WITH THE MATLAB CODE. USE ON YOUR OWN RISK
-testData <- matrix(rnorm(10000), nrow=10)
-testCor <- cor(t(testData))
-testDeconv <- netDeconv(testCor)
+test <- matrix(c(1,1,2,24, 3,5,8,29, 13,21,34, 35, 8, 9, 1, 5),
+               nrow=4,byrow=TRUE)
+netDeconv(test)
